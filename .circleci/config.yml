@@ -193,6 +193,7 @@ jobs:
               --filters "Name=tag:project,Values=backend-supe-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
 
+            echo "[web]" > .circleci/ansible/inventory.txt
             echo $BACKEND_IP >> .circleci/ansible/inventory.txt
 
             curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "$BACKEND_IP" https://api.memstash.io/values/backend_ip
@@ -223,7 +224,7 @@ jobs:
           name: Configure server
           working_directory: ./.circleci/ansible
           command: |
-            ansible-playbook -i inventory configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
 
   run-migrations:
@@ -298,7 +299,7 @@ jobs:
           name: Deploy backend
           working_directory: ./.circleci/ansible
           command: |
-            ansible-playbook -i inventory deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
 
@@ -338,6 +339,7 @@ jobs:
             else
               return 1
             fi
+      - empty-bucket
       - destroy-environment
       - revert-migrations
 
