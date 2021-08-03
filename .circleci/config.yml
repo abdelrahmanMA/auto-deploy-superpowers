@@ -157,7 +157,7 @@ jobs:
               --tags project=backend-supe-${CIRCLE_WORKFLOW_ID:0:7} \
               --stack-name "backend-supe-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-              exit 1
+
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -166,7 +166,7 @@ jobs:
               #--tags project=frontend-supe-${CIRCLE_WORKFLOW_ID:0:7} \
               # --stack-name "frontend-supe${CIRCLE_WORKFLOW_ID:0:7}" \
               # --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-              exit 1
+
       - run:
           name: Add back-end ip to ansible inventory and save it to memstash
           command: |
@@ -179,7 +179,6 @@ jobs:
 
             curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "$BACKEND_IP" https://api.memstash.io/values/backend_ip
 
-            exit 1
       - persist_to_workspace:
           root: ~/
           paths:
@@ -219,7 +218,6 @@ jobs:
           working_directory: ./backend
           command: |
             npm run migrations > migration_status
-            exit 1
       - run:
           name: Send migration results to memstash
           command: |
@@ -229,7 +227,6 @@ jobs:
             else
               curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
 
-            exit 1
       - destroy-environment
 
   deploy-frontend:
