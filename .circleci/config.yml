@@ -210,6 +210,7 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - install-aws-cli
       - add_ssh_keys:
           fingerprints: ["08:08:85:21:44:b8:cb:42:bc:49:7d:5b:c4:d3:4d:50"]
       - attach_workspace:
