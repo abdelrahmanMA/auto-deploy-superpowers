@@ -237,7 +237,7 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "1" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
             else
               curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "0" https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
-
+            fi
       - destroy-environment
 
   deploy-frontend:
