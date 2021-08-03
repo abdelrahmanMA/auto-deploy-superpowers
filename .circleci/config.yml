@@ -40,7 +40,7 @@ commands:
 jobs:
   frontend-dependencies:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - run:
@@ -53,7 +53,7 @@ jobs:
 
   backend-dependencies:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - run:
@@ -66,7 +66,7 @@ jobs:
 
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -79,7 +79,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -96,7 +96,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -109,7 +109,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -122,7 +122,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -135,7 +135,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - restore_cache:
@@ -216,7 +216,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - attach_workspace:
@@ -242,7 +242,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.6.0
     steps:
       - checkout
       - install-aws-cli
