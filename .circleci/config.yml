@@ -76,6 +76,10 @@ jobs:
           working_directory: ./frontend
           command: |
             npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - frontend/dist
 
   build-backend:
     docker:
@@ -246,6 +250,10 @@ jobs:
     steps:
       - checkout
       - install-aws-cli
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Get backend url
           command: |
