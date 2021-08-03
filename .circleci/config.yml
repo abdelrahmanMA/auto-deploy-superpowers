@@ -301,6 +301,7 @@ jobs:
           name: Deploy backend
           command: |
             ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/deploy-backend.yml
+      - empty-bucket
       - destroy-environment
       - revert-migrations
 
@@ -368,6 +369,7 @@ jobs:
               --stack-name cloudfront-supe-production \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
+      - empty-bucket
       - destroy-environment
       - revert-migrations
 
