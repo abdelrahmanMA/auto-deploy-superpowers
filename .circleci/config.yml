@@ -10,6 +10,14 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name backend-supe-${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name frontend-supe-${CIRCLE_WORKFLOW_ID:0:7}
+  empty-bucket:
+    description: Empties bucket before destroying enviroments
+    steps:
+      - run:
+          name: Empty Bucket
+          when: on_fail
+          command: |
+              aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -19,7 +27,7 @@ commands:
           when: on_fail
           working_directory: ./backend
           command: |
-            SUCCESS=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7}
+            SUCCESS=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/migrations-${CIRCLE_WORKFLOW_ID:0:7})
             if(( $SUCCESS==1 ));
             then
               npm run migrations:revert
@@ -265,6 +273,7 @@ jobs:
           working_directory: ./frontend
           command: |
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+      - empty-bucket
       - destroy-environment
       - revert-migrations
 
