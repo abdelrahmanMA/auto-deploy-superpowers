@@ -299,9 +299,8 @@ jobs:
             aws --version
       - run:
           name: Deploy backend
-          working_directory: ./.circleci/ansible
           command: |
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/deploy-backend.yml
       - destroy-environment
       - revert-migrations
 
