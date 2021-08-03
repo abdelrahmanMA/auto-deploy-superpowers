@@ -9,7 +9,7 @@
 - name: "copy node_modules"
   become: true
   synchronize:
-    src: /root/project/backend/node_modules
+    src: /home/circleci/project/backend/node_modules
     dest: /home/ubuntu/backend-supe
     recursive: true
 
