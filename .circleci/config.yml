@@ -170,7 +170,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=frontend-supe-${CIRCLE_WORKFLOW_ID:0:7} \
-              --stack-name "frontend-supe${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name "frontend-supe-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
 
       - run:
@@ -375,32 +375,32 @@ jobs:
 workflows:
   default:
     jobs:
-      - frontend-dependencies
-      - backend-dependencies
-      - build-frontend:
-          requires: [frontend-dependencies]
-      - build-backend:
-          requires: [backend-dependencies]
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [main]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only: [main]
+       - frontend-dependencies
+       - backend-dependencies
+       - build-frontend:
+           requires: [frontend-dependencies]
+       - build-backend:
+           requires: [backend-dependencies]
+       - test-frontend:
+           requires: [build-frontend]
+       - test-backend:
+           requires: [build-backend]
+       - scan-backend:
+           requires: [build-backend]
+       - scan-frontend:
+           requires: [build-frontend]
+       - deploy-infrastructure:
+           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+           filters:
+             branches:
+               only: [main]
+       - configure-infrastructure:
+           requires: [deploy-infrastructure]
+           filters:
+             branches:
+               only: [main]
       - run-migrations:
-          requires: [configure-infrastructure]
+           requires: [configure-infrastructure]
           filters:
             branches:
               only: [main]
