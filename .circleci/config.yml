@@ -343,9 +343,9 @@ jobs:
             else
               return 1
             fi
-      - empty-bucket
-      - destroy-environment
-      - revert-migrations
+      # - empty-bucket
+      # - destroy-environment
+      # - revert-migrations
 
   cloudfront-update:
     docker:
