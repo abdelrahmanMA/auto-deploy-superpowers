@@ -1,31 +1,19 @@
 ---
-- name: "copy backend binaries"
+- name: "copy backend"
   become: true
   synchronize:
-    src: /root/project/backend/dist
-    dest: /home/ubuntu/backend-supe
+    src: /root/project/backend
+    dest: /home/ubuntu
     recursive: true
 
 - name: "copy node_modules"
   become: true
   synchronize:
     src: /home/circleci/project/backend/node_modules
-    dest: /home/ubuntu/backend-supe
+    dest: /home/ubuntu/backend
     recursive: true
-
-- name: "export enviroment"
-  shell: |
-    export CIRCLE_WORKFLOW_ID="{{CIRCLE_WORKFLOW_ID}}"
-    export TYPEORM_MIGRATIONS="{{TYPEORM_MIGRATIONS}}"
-    export TYPEORM_ENTITIES="{{TYPEORM_ENTITIES}}"
-    export TYPEORM_CONNECTION="{{TYPEORM_CONNECTION}}"
-    export TYPEORM_HOST="{{TYPEORM_HOST}}"
-    export TYPEORM_PORT="{{TYPEORM_PORT}}"
-    export TYPEORM_USERNAME="{{TYPEORM_USERNAME}}"
-    export TYPEORM_PASSWORD="{{TYPEORM_PASSWORD}}"
-    export TYPEORM_DATABASE="{{TYPEORM_DATABASE}}"
 
 - name: "use pm2 to run the node server"
   shell: |
-    cd /home/ubuntu/backend-supe
-    pm2 start npm -- run "start:dev"
+    cd /home/ubuntu/backend
+    pm2 start -f dist/main.js

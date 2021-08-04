@@ -302,6 +302,7 @@ jobs:
       - run:
           name: Deploy backend
           command: |
+            printenv >> ./backend/.env
             ansible-playbook -i ./.circleci/ansible/inventory.txt ./.circleci/ansible/deploy-backend.yml
       - empty-bucket
       - destroy-environment
