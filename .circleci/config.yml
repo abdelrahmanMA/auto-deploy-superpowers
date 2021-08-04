@@ -361,7 +361,9 @@ jobs:
       - run:
           name: Store old Workflow ID to be able to clean it up later
           command: |
-            curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "${CIRCLE_WORKFLOW_ID:0:7}" https://api.memstash.io/values/workflow_id
+            OLD_WORKFLOW_ID=$(aws cloudformation list-exports --query "Exports[?Name=='WorkflowID'].Value" --output text)
+            echo OLD_WORKFLOW_ID=${OLD_WORKFLOW_ID}
+            curl -H "Content-Type: text/plain" -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request PUT --data "${OLD_WORKFLOW_ID}" https://api.memstash.io/values/workflow_id
       - run:
           name: Update cloudfront distribution
           command: |
@@ -382,16 +384,17 @@ jobs:
       - run:
           name: Get old stack workflow id
           command: |
-            export OldWorkflowID=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/WorkflowID)
+            export OLD_WORKFLOW_ID=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/workflow_id)
+            echo $OLD_WORKFLOW_ID
             export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter UPDATE_COMPLETE CREATE_COMPLETE --output text)
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            if [[ "${STACKS[@]}" =~ "${OLD_WORKFLOW_ID}" ]]
             then
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "backend-supe-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "frontend-supe-${OldWorkflowID}"
+              aws s3 rm "s3://udapeople-${OLD_WORKFLOW_ID}" --recursive
+              aws cloudformation delete-stack --stack-name "backend-supe-${OLD_WORKFLOW_ID}"
+              aws cloudformation delete-stack --stack-name "frontend-supe-${OLD_WORKFLOW_ID}"
             fi
 
 workflows:
