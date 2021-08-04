@@ -328,9 +328,11 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
+            echo "$API_URL"
+            echo "${API_URL}"
             echo "$API_URL/api/status"
-            curl -s --head "$API_URL/api/status"
-            if curl -s --head "$API_URL/api/status"
+            echo "${API_URL}/api/status"
+            if curl -s --head "${API_URL}/api/status"
             then
               return 0
             else
