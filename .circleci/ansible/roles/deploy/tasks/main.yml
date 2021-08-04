@@ -13,10 +13,17 @@
     dest: /home/ubuntu/backend-supe
     recursive: true
 
-- name: "delete anything that might already be running"
-  become: true
-  command: pm2 delete all
-  ignore_errors: true
+- name: "export enviroment"
+  shell: |
+    export CIRCLE_WORKFLOW_ID="{{CIRCLE_WORKFLOW_ID}}"
+    export TYPEORM_MIGRATIONS="{{TYPEORM_MIGRATIONS}}"
+    export TYPEORM_ENTITIES="{{TYPEORM_ENTITIES}}"
+    export TYPEORM_CONNECTION="{{TYPEORM_CONNECTION}}"
+    export TYPEORM_HOST="{{TYPEORM_HOST}}"
+    export TYPEORM_PORT="{{TYPEORM_PORT}}"
+    export TYPEORM_USERNAME="{{TYPEORM_USERNAME}}"
+    export TYPEORM_PASSWORD="{{TYPEORM_PASSWORD}}"
+    export TYPEORM_DATABASE="{{TYPEORM_DATABASE}}"
 
 - name: "use pm2 to run the node server"
   shell: |
