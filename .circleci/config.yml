@@ -350,16 +350,14 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          keys: [backend-build]
       - run:
           name: Install dependencies
           command: |
             yum install -y tar gzip curl
             curl -sL https://rpm.nodesource.com/setup_13.x | bash -
             yum install -y nodejs
+      - restore_cache:
+          keys: [backend-build]
       - run:
           name: Store old Workflow ID to be able to clean it up later
           command: |
