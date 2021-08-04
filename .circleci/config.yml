@@ -320,18 +320,11 @@ jobs:
             apk add --update curl nodejs npm
             pip install awscli
       - run:
-          name: Get backend url
+          name: Backend smoke test.
           command: |
             BACKEND_IP=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/backend_ip)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-      - run:
-          name: Backend smoke test.
-          command: |
-            echo "$API_URL"
-            echo "${API_URL}"
-            echo "$API_URL/api/status"
-            echo "${API_URL}/api/status"
             if curl -s --head "${API_URL}/api/status"
             then
               return 0
@@ -342,6 +335,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.eu-central-1.amazonaws.com/index.html"
+            curl -s ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
               return 1
