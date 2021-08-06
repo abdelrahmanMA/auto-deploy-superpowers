@@ -266,15 +266,13 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Get backend url
-          command: |
-            BACKEND_IP=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/backend_ip)
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
-      - run:
           name: Deploy frontend objects to S3
           working_directory: ./frontend
           command: |
+            BACKEND_IP=$(curl -H "token: 478e72d7-57cd-4f50-98bd-fc308dcd3ec7" --request GET https://api.memstash.io/values/backend_ip)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL=${API_URL}" > .env
+            npm run build
             aws s3 cp ./dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
       - empty-bucket
       - destroy-environment
